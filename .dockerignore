@@ -1,0 +1,15 @@
+.git
+.agents
+.codex
+.github
+.idea
+.vscode
+android
+ios
+node_modules
+react-native-sdk/node_modules
+build
+test-results
+tests
+*.log
+

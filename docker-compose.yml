@@ -1,0 +1,21 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jitsi-meet-web-local:latest
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    environment:
+      # The XMPP domain configured by your Jitsi/Prosody backend.
+      JITSI_DOMAIN: "${JITSI_DOMAIN:-jitsi-meet.example.com}"
+      # Browser-accessible backend endpoints. Use wss/https in production.
+      BOSH_URL: "${BOSH_URL:-https://jitsi-meet.example.com/http-bind}"
+      WEBSOCKET_URL: "${WEBSOCKET_URL:-wss://jitsi-meet.example.com/xmpp-websocket}"
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1/healthz >/dev/null || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
