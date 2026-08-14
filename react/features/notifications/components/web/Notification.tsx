@@ -1,4 +1,5 @@
 import { Theme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import React, { isValidElement, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -39,12 +40,16 @@ interface IProps extends INotificationProps {
 const useStyles = makeStyles()((theme: Theme) => {
     return {
         container: {
-            backgroundColor: theme.palette.notificationBackground,
-            padding: '8px 16px 8px 20px',
+            backgroundColor: alpha(theme.palette.notificationBackground, 0.52),
+            padding: '4px 8px 4px 12px',
             display: 'flex',
             position: 'relative' as const,
-            borderRadius: `${theme.shape.borderRadius}px`,
-            boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.25)',
+            overflow: 'hidden',
+            border: `1px solid ${alpha(theme.palette.text01, 0.12)}`,
+            borderRadius: `${theme.shape.borderRadius * 2}px`,
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.18)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             marginBottom: theme.spacing(2),
 
             '&:last-of-type': {
@@ -54,11 +59,11 @@ const useStyles = makeStyles()((theme: Theme) => {
             animation: `${keyframes`
                 0% {
                     opacity: 0;
-                    transform: translateX(-80%);
+                    transform: translate3d(0, 6px, 0) scale(0.98);
                 }
                 100% {
                     opacity: 1;
-                    transform: translateX(0);
+                    transform: translate3d(0, 0, 0) scale(1);
                 }
             `} 0.2s forwards ease`,
 
@@ -66,11 +71,11 @@ const useStyles = makeStyles()((theme: Theme) => {
                 animation: `${keyframes`
                     0% {
                         opacity: 1;
-                        transform: translateX(0);
+                    transform: translate3d(0, 0, 0) scale(1);
                     }
                     100% {
                         opacity: 0;
-                        transform: translateX(-80%);
+                    transform: translate3d(0, 4px, 0) scale(0.98);
                     }
                 `} 0.2s forwards ease`
             }
@@ -78,11 +83,10 @@ const useStyles = makeStyles()((theme: Theme) => {
 
         ribbon: {
             width: '4px',
-            height: 'calc(100% - 16px)',
+            height: '100%',
             position: 'absolute' as const,
             left: 0,
-            top: '8px',
-            borderRadius: '4px',
+            top: 0,
 
             '&.normal': {
                 backgroundColor: theme.palette.notificationNormalIcon
@@ -103,8 +107,8 @@ const useStyles = makeStyles()((theme: Theme) => {
 
         content: {
             display: 'flex',
-            alignItems: 'flex-start',
-            padding: '8px 0',
+            alignItems: 'center',
+            padding: '10px 0',
             flex: 1,
             maxWidth: '100%'
         },
@@ -112,10 +116,11 @@ const useStyles = makeStyles()((theme: Theme) => {
         textContainer: {
             display: 'flex',
             flexDirection: 'column' as const,
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             color: theme.palette.notificationText,
             flex: 1,
-            margin: '0 8px',
+            margin: '0 10px',
+            minHeight: '32px',
 
             // maxWidth: 100% minus the icon on left (20px) minus the close icon on the right (20px) minus the margins
             maxWidth: 'calc(100% - 40px - 16px)',
@@ -123,14 +128,19 @@ const useStyles = makeStyles()((theme: Theme) => {
         },
 
         title: {
-            ...theme.typography.bodyShortBold
+            ...theme.typography.bodyShortBold,
+            color: theme.palette.notificationText,
+            letterSpacing: '0.01em',
+            lineHeight: 1.35
         },
 
         description: {
             ...theme.typography.bodyShortRegular,
             overflow: 'auto',
             overflowWrap: 'break-word',
-            userSelect: 'all',
+            userSelect: 'text',
+            lineHeight: 1.45,
+            opacity: 0.88,
 
             '&:not(:empty)': {
                 marginTop: theme.spacing(1)
@@ -171,7 +181,46 @@ const useStyles = makeStyles()((theme: Theme) => {
         },
 
         closeIcon: {
-            cursor: 'pointer'
+            alignItems: 'center',
+            alignSelf: 'center',
+            background: 'transparent',
+            border: 0,
+            borderRadius: '50%',
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: theme.spacing(1),
+
+            '&:hover': {
+                background: 'rgba(255, 255, 255, 0.08)'
+            },
+
+            '&:focus-visible': {
+                outline: `2px solid ${theme.palette.notificationActionFocus}`,
+                outlineOffset: 1
+            }
+        },
+
+        iconContainer: {
+            alignItems: 'center',
+            borderRadius: '50%',
+            display: 'flex',
+            flex: '0 0 32px',
+            height: '32px',
+            justifyContent: 'center',
+            background: alpha(theme.palette.notificationNormalIcon, 0.14),
+
+            '&.error': {
+                background: alpha(theme.palette.notificationError, 0.14)
+            },
+
+            '&.success': {
+                background: alpha(theme.palette.notificationSuccess, 0.14)
+            },
+
+            '&.warning': {
+                background: alpha(theme.palette.notificationWarning, 0.14)
+            }
         }
     };
 });
@@ -336,7 +385,7 @@ const Notification = ({
             role = { isErrorOrWarning ? 'alert' : 'status' }>
             <div className = { cx(classes.ribbon, appearance) } />
             <div className = { classes.content }>
-                <div className = { icon }>
+                <div className = { cx(classes.iconContainer, appearance) }>
                     <Icon
                         color = { ICON_COLOR[appearance as keyof typeof ICON_COLOR] }
                         size = { 20 }
@@ -360,15 +409,18 @@ const Notification = ({
                     </div>
                 </div>
                 {!disableClosing && (
-                    <Icon
+                    <button
+                        aria-label = { t('dialog.close') }
                         className = { classes.closeIcon }
-                        color = { theme.palette.notificationCloseIcon }
                         id = 'close-notification'
                         onClick = { onDismiss }
-                        size = { 20 }
-                        src = { IconCloseLarge }
-                        tabIndex = { 0 }
-                        testId = { `${titleKey || descriptionKey}-dismiss` } />
+                        type = 'button'>
+                        <Icon
+                            color = { theme.palette.notificationCloseIcon }
+                            size = { 18 }
+                            src = { IconCloseLarge }
+                            testId = { `${titleKey || descriptionKey}-dismiss` } />
+                    </button>
                 )}
             </div>
         </div>

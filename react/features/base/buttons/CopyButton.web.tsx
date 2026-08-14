@@ -80,6 +80,11 @@ interface IProps {
     id?: string;
 
     /**
+     * Called after the text has been copied successfully.
+     */
+    onCopySuccess?: () => void;
+
+    /**
      * The text displayed on copy success.
      */
     textOnCopySuccess: string;
@@ -107,6 +112,7 @@ function CopyButton({
     textToCopy,
     textOnHover,
     textOnCopySuccess,
+    onCopySuccess,
     id
 }: IProps) {
     const { classes, cx } = useStyles();
@@ -133,6 +139,7 @@ function CopyButton({
 
         if (isCopied) {
             setIsClicked(true);
+            onCopySuccess?.();
 
             setTimeout(() => {
                 // avoid: Can't perform a React state update on an unmounted component

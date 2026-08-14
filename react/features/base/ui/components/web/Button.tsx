@@ -176,11 +176,14 @@ const useStyles = makeStyles()(theme => {
 
 const Button = React.forwardRef<any, any>(({
     accessibilityLabel,
+    ariaExpanded,
+    ariaHasPopup,
     autoFocus = false,
     className,
     disabled,
     fullWidth,
     icon,
+    iconAfter,
     id,
     isSubmit,
     label,
@@ -196,6 +199,8 @@ const Button = React.forwardRef<any, any>(({
 
     return (
         <button
+            aria-expanded = { ariaExpanded }
+            aria-haspopup = { ariaHasPopup }
             aria-label = { accessibilityLabel }
             autoFocus = { autoFocus }
             className = { cx(styles.button, styles[type],
@@ -216,6 +221,10 @@ const Button = React.forwardRef<any, any>(({
             {(labelKey || label) && <span className = { icon ? styles.textWithIcon : '' }>
                 {labelKey ? t(labelKey) : label}
             </span>}
+            {iconAfter && <Icon
+                className = 'button-icon-after'
+                size = { 20 }
+                src = { iconAfter } />}
         </button>
     );
 });

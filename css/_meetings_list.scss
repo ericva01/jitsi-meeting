@@ -66,15 +66,18 @@
 
     .item {
         background: #fff;
+        border: 1px solid rgba(37, 56, 88, 0.12);
         box-sizing: border-box;
-        border-radius: 4px;
-        display: inline-flex;
-        margin: 4px 4px 0 4px;
-        min-height: 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        display: grid;
+        grid-template-areas: 'date actions' 'meeting actions' 'time actions';
+        grid-template-columns: minmax(0, 1fr) auto;
+        margin: 8px 4px 0;
+        min-height: 104px;
+        padding: 14px 16px;
+        transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
         width: calc(100% - 8px);
-        word-break: break-word;
-        display: flex;
-        flex-direction: row;
         text-align: left;
 
         &:first-child {
@@ -82,22 +85,29 @@
         }
 
         .left-column {
-            order: -1;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 0;
-            padding-left: 16px;
-            padding-top: 13px;
+            display: contents;
+
+            .title {
+                grid-area: date;
+            }
+
+            .subtitle {
+                grid-area: time;
+            }
         }
 
         .right-column {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            flex-grow: 1;
-            padding-left: 16px;
-            padding-top: 13px;
-            position: relative;
+            display: contents;
+
+            .title {
+                grid-area: meeting;
+                min-width: 0;
+            }
+
+            .subtitle {
+                grid-area: time;
+                justify-self: end;
+            }
         }
 
         .title {
@@ -105,6 +115,16 @@
             font-weight: 600;
             line-height: 1rem;
             margin-bottom: 4px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .right-column .title {
+            font-size: 0.9375rem;
+            line-height: 1.25rem;
+            margin: 4px 0 6px;
         }
 
         .subtitle {
@@ -120,7 +140,8 @@
             align-items: center;
             justify-content: center;
             flex-grow: 0;
-            margin-right: 16px;
+            grid-area: actions;
+            margin-right: 0;
         }
 
         &.with-click-handler {
@@ -129,7 +150,10 @@
 
         &.with-click-handler:hover,
         &.with-click-handler:focus {
-            background-color: #c7ddff;
+            background-color: rgba(37, 56, 88, 0.035);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            outline: 0;
+            transform: translateY(-1px);
         }
 
         .add-button {
@@ -152,12 +176,27 @@
     }
 
     .delete-meeting {
+        align-items: center;
+        background: transparent;
+        border-radius: 8px;
         display: none;
-        margin-right: 16px;
+        height: 30px;
+        justify-content: center;
+        margin-right: 8px;
+        outline: none;
         position: absolute;
+        transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        width: 30px;
 
         &>svg {
-            fill: #0074e0;
+            fill: var(--icon-secondary-color);
+            height: 18px;
+            transition: fill 160ms ease, transform 160ms ease;
+            width: 18px;
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--action-danger-color);
         }
     }
 
@@ -169,8 +208,12 @@
         }
 
         .delete-meeting:hover {
+            background: var(--action-danger-translucent-color);
+            transform: translateY(-1px);
+
             &>svg {
-                fill: #4687ED;
+                fill: var(--action-danger-hover-color);
+                transform: scale(1.04);
             }
         }
     }

@@ -47,8 +47,8 @@ const useStyles = makeStyles()(() => {
             position: 'absolute',
             left: '16px',
             bottom: '84px',
-            width: '320px',
-            maxWidth: '100%',
+            width: '360px',
+            maxWidth: 'calc(100% - 32px)',
             zIndex: 600
         },
 

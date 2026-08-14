@@ -8,6 +8,16 @@ export interface IButtonProps {
     accessibilityLabel?: string;
 
     /**
+     * Whether the controlled popup is currently expanded.
+     */
+    ariaExpanded?: boolean;
+
+    /**
+     * Identifies the type of popup controlled by the button.
+     */
+    ariaHasPopup?: React.AriaAttributes['aria-haspopup'];
+
+    /**
      * Whether or not the button should automatically focus.
      */
     autoFocus?: boolean;
@@ -21,6 +31,11 @@ export interface IButtonProps {
      * The icon to be displayed on the button.
      */
     icon?: Function;
+
+    /**
+     * The icon displayed after the label.
+     */
+    iconAfter?: Function;
 
     /**
      * The translation key of the text to be displayed on the button.

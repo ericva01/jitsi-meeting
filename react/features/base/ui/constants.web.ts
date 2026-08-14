@@ -1,4 +1,5 @@
 import { Theme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 
 export * from './constants.any';
 
@@ -14,6 +15,10 @@ export const commonStyles = (theme: Theme) => {
         ':root': {
             // Inject semantic tokens as CSS custom properties for use in SCSS
             '--drawer-background-color': theme.palette.drawerBackground,
+            '--action-danger-color': theme.palette.actionDanger,
+            '--action-danger-hover-color': theme.palette.actionDangerHover,
+            '--action-danger-translucent-color': alpha(theme.palette.actionDanger, 0.12),
+            '--icon-secondary-color': theme.palette.icon02,
             '--icon-svg-fill': theme.palette.iconSvgFill,
             '--overflow-menu-background-color': theme.palette.overflowMenuBackground,
             '--overflow-menu-item-disabled-color': theme.palette.overflowMenuItemDisabled,

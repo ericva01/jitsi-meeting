@@ -14,8 +14,11 @@ import {
     JitsiConferenceErrors,
     JitsiConferenceEvents
 } from '../base/lib-jitsi-meet';
+import { PARTICIPANT_ROLE_CHANGED } from '../base/participants/actionTypes';
+import { PARTICIPANT_ROLE } from '../base/participants/constants';
 import {
     getFirstLoadableAvatarUrl,
+    getLocalParticipant,
     getParticipantDisplayName
 } from '../base/participants/functions';
 import MiddlewareRegistry from '../base/redux/MiddlewareRegistry';
@@ -66,7 +69,7 @@ import {
     setPasswordJoinFailed,
     startKnocking
 } from './actions';
-import { updateLobbyParticipantOnLeave } from './actions.any';
+import { toggleLobbyMode, updateLobbyParticipantOnLeave } from './actions.any';
 import { KNOCKING_PARTICIPANT_SOUND_ID } from './constants';
 import { getKnockingParticipants, showLobbyChatButton } from './functions';
 import { KNOCKING_PARTICIPANT_FILE } from './sounds';
@@ -91,6 +94,20 @@ MiddlewareRegistry.register(store => next => action => {
         _maybeSendLobbyNotification(participant, data, store);
 
         break;
+    }
+    case PARTICIPANT_ROLE_CHANGED: {
+        const localParticipant = getLocalParticipant(store.getState());
+        const result = next(action);
+
+        if (localParticipant?.id === action.participant.id
+                && action.participant.role === PARTICIPANT_ROLE.MODERATOR
+                && typeof sessionStorage !== 'undefined'
+                && sessionStorage.getItem('autoEnableLobby') === 'true') {
+            store.dispatch(toggleLobbyMode(true));
+            sessionStorage.removeItem('autoEnableLobby');
+        }
+
+        return result;
     }
     case KNOCKING_PARTICIPANT_ARRIVED_OR_UPDATED: {
         // We need the full update result to be in the store already

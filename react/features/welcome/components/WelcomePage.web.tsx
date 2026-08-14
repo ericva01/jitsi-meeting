@@ -1,6 +1,8 @@
+import { generateRoomWithoutSeparator } from '@jitsi/js-utils/random';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { appNavigate } from '../../app/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate, translateToHTML } from '../../base/i18n/functions';
 import Icon from '../../base/icons/components/Icon';
@@ -14,6 +16,7 @@ import { SETTINGS_TABS } from '../../settings/constants';
 
 import { AbstractWelcomePage, IProps, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
+import WelcomeMeetingActions from './WelcomeMeetingActions';
 
 /**
  * The pattern used to validate room name.
@@ -124,6 +127,8 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
 
         // Bind event handlers so they are only bound once per instance.
         this._onFormSubmit = this._onFormSubmit.bind(this);
+        this._onScheduleMeeting = this._onScheduleMeeting.bind(this);
+        this._onStartInstantMeeting = this._onStartInstantMeeting.bind(this);
         this._onRoomChange = this._onRoomChange.bind(this);
         this._setAdditionalCardRef = this._setAdditionalCardRef.bind(this);
         this._setAdditionalContentRef
@@ -245,16 +250,10 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                                     </form>
                                 </div>
 
-                                <button
-                                    aria-disabled = 'false'
-                                    aria-label = 'Start meeting'
-                                    className = 'welcome-page-button'
-                                    id = 'enter_room_button'
-                                    onClick = { this._onFormSubmit }
-                                    tabIndex = { 0 }
-                                    type = 'button'>
-                                    {t('welcomepage.startMeeting')}
-                                </button>
+                                <WelcomeMeetingActions
+                                    disabled = { this.state.joining }
+                                    onScheduleMeeting = { this._onScheduleMeeting }
+                                    onStartInstantMeeting = { this._onStartInstantMeeting } />
                             </div>
                         </div>
                         {this._titleHasNotAllowCharacter && (
@@ -340,6 +339,34 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this._onJoin();
         }
+    }
+
+    /**
+     * Starts a new meeting and requests lobby mode once the creator becomes moderator.
+     *
+     * @returns {void}
+     */
+    _onStartInstantMeeting() {
+        const room = generateRoomWithoutSeparator();
+
+        sessionStorage.setItem('autoEnableLobby', 'true');
+        this.setState({ joining: true });
+
+        const onNavigateFailed = () => {
+            sessionStorage.removeItem('autoEnableLobby');
+            this._mounted && this.setState({ joining: false });
+        };
+
+        this.props.dispatch(appNavigate(room)).catch(onNavigateFailed);
+    }
+
+    /**
+     * Placeholder for the future scheduling flow.
+     *
+     * @returns {void}
+     */
+    _onScheduleMeeting() {
+        // Scheduling functionality will be implemented later.
     }
 
     /**

@@ -13,6 +13,7 @@ import {
     isScreenShareParticipant,
     isWhiteboardParticipant
 } from '../base/participants/functions';
+import { FakeParticipant } from '../base/participants/types';
 import MiddlewareRegistry from '../base/redux/MiddlewareRegistry';
 import StateListenerRegistry from '../base/redux/StateListenerRegistry';
 import { PARTICIPANTS_PANE_OPEN } from '../participants-pane/actionTypes';
@@ -130,6 +131,7 @@ MiddlewareRegistry.register(store => next => action => {
             && !p.local
             && !isScreenShareParticipant(p)
             && !isWhiteboardParticipant(p)
+            && p.fakeParticipant !== FakeParticipant.SharedVideo
             && !joinLeaveNotificationsDisabled()
             && !p.isReplacing) {
             dispatch(showParticipantJoinedNotification(
@@ -151,6 +153,7 @@ MiddlewareRegistry.register(store => next => action => {
                 && !participant.local
                 && !isScreenShareParticipant(participant)
                 && !isWhiteboardParticipant(participant)
+                && participant.fakeParticipant !== FakeParticipant.SharedVideo
                 && !action.participant.isReplaced) {
                 dispatch(showParticipantLeftNotification(
                     getParticipantDisplayName(state, participant.id)

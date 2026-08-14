@@ -1,3 +1,4 @@
+import { alpha } from '@mui/material/styles';
 import React, { ReactNode, useCallback } from 'react';
 import { makeStyles } from 'tss-react/mui';
 
@@ -149,13 +150,23 @@ const useStyles = makeStyles()(theme => {
             right: 0,
             top: 0,
             width: 36,
+            color: 'inherit',
+            transition: 'background-color 180ms ease, box-shadow 180ms ease',
 
             '&:hover': {
-                backgroundColor: '#0262B6'
+                backgroundColor: alpha(theme.palette.prejoinActionButtonPrimaryText, 0.1)
+            },
+
+            '&:focus-visible': {
+                boxShadow: `inset 0 0 0 2px ${theme.palette.prejoinActionButtonPrimaryText}`,
+                outline: 0
             },
 
             '& svg': {
-                pointerEvents: 'none'
+                color: 'inherit',
+                fill: 'currentColor',
+                pointerEvents: 'none',
+                transition: 'fill 180ms ease'
             }
         }
     };
