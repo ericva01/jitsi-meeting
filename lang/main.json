@@ -1219,6 +1219,20 @@
         "unavailableTitle": "Recording unavailable",
         "uploadToCloud": "Upload to the cloud"
     },
+    "recordingProtection": {
+        "blocked": "Built-in recording and live streaming are disabled by Recording Protection.",
+        "confirmDescription": "Recording Protection will stop active built-in recording or live streaming before it is enabled.",
+        "confirmTitle": "Stop recording and enable protection?",
+        "description": "Disables Jitsi local recording, server recording, and live streaming, and adds a participant-specific moving watermark.",
+        "disabledNotification": "Built-in recording and live streaming are available again.",
+        "enabledNotification": "Built-in recording and live streaming are disabled. A participant-specific watermark is visible.",
+        "indicator": "Recording Protection on",
+        "indicatorLabel": "Recording Protection is enabled",
+        "limitation": "This browser feature cannot block OBS, Windows Game Bar, operating-system capture, external cameras, audio capture, or every form of screen recording.",
+        "moderatorOnly": "Only a moderator can change Recording Protection.",
+        "stopAndEnable": "Stop and enable",
+        "title": "Recording Protection"
+    },
     "screenshareDisplayName": "{{name}}'s screen",
     "sectionList": {
         "pullToRefresh": "Pull to refresh"

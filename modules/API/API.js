@@ -118,6 +118,7 @@ import {
 import { grantRecordingConsent, grantRecordingConsentAndUnmute } from '../../react/features/recording/actions.web';
 import { RECORDING_METADATA_ID, RECORDING_TYPES } from '../../react/features/recording/constants';
 import { getActiveSession, supportsLocalRecording } from '../../react/features/recording/functions';
+import { isRecordingProtectionEnabled } from '../../react/features/recording-protection/functions';
 import { startAudioScreenShareFlow, startScreenShareFlow } from '../../react/features/screen-share/actions';
 import { isScreenAudioSupported } from '../../react/features/screen-share/functions';
 import {
@@ -743,6 +744,12 @@ function initCommands() {
             transcription
         }) => {
             const state = APP.store.getState();
+
+            if (isRecordingProtectionEnabled(state)) {
+                logger.error('Failed starting recording: Recording Protection is enabled');
+
+                return;
+            }
             const conference = getCurrentConference(state);
 
             if (!conference) {

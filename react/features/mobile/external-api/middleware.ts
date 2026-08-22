@@ -60,6 +60,7 @@ import { NOTIFICATION_TIMEOUT_TYPE, NOTIFICATION_TYPE } from '../../notification
 import { RECORDING_SESSION_UPDATED } from '../../recording/actionTypes';
 import { RECORDING_TYPES } from '../../recording/constants';
 import { getActiveSession } from '../../recording/functions';
+import { isRecordingProtectionEnabled } from '../../recording-protection/functions';
 import { setRequestingSubtitles } from '../../subtitles/actions.any';
 import { CUSTOM_BUTTON_PRESSED } from '../../toolbox/actionTypes';
 import { muteLocal } from '../../video-menu/actions.native';
@@ -520,6 +521,12 @@ function _registerForNativeEvents(store: IStore) {
             }: any) => {
         const state = store.getState();
         const conference = getCurrentConference(state);
+
+        if (isRecordingProtectionEnabled(state)) {
+            logger.warn('Ignoring start recording request because Recording Protection is enabled');
+
+            return;
+        }
 
         if (!conference) {
             logger.error('Conference is not defined');

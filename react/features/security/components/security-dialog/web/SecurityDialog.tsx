@@ -9,6 +9,7 @@ import { isInBreakoutRoom } from '../../../../breakout-rooms/functions';
 import E2EESection from '../../../../e2ee/components/E2EESection';
 import LobbySection from '../../../../lobby/components/web/LobbySection';
 import { isEnablingLobbyAllowed } from '../../../../lobby/functions';
+import RecordingProtectionSection from '../../../../recording-protection/components/RecordingProtectionSection';
 
 import PasswordSection from './PasswordSection';
 
@@ -58,6 +59,8 @@ export default function SecurityDialog() {
                         <E2EESection />
                     </> : null
                 }
+                <div className = 'separator-line' />
+                <RecordingProtectionSection />
 
             </div>
         </Dialog>

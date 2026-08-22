@@ -507,6 +507,11 @@ export function showStartRecordingNotificationWithCallback(openRecordingDialog: 
             customActionNameKey: [ 'notify.suggestRecordingAction' ],
             customActionHandler: [ () => {
                 state = getState();
+                if (state['features/recording-protection'].enabled) {
+                    dispatch(hideNotification(START_RECORDING_NOTIFICATION_ID));
+
+                    return;
+                }
                 const { recordingService } = state['features/base/config'];
                 const canBypassDialog = recordingService?.enabled
                     && isJwtFeatureEnabled(state, MEET_FEATURES.RECORDING, false);

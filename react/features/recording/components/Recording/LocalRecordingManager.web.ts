@@ -146,6 +146,10 @@ const LocalRecordingManager: ILocalRecordingManager = {
     async startLocalRecording(store, onlySelf) {
         const { dispatch, getState } = store;
 
+        if (getState()['features/recording-protection'].enabled) {
+            throw new Error('RecordingProtectionEnabled');
+        }
+
         this.roomName = getRoomName(getState()) ?? '';
 
         // Get a handle to the file we are going to write.

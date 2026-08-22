@@ -119,6 +119,15 @@ export default class AbstractLiveStreamButton<P extends IProps> extends Abstract
 export function _mapStateToProps(state: IReduxState, ownProps: IProps) {
     let { visible } = ownProps;
 
+    if (state['features/recording-protection'].enabled) {
+        return {
+            _disabled: true,
+            _isLiveStreamRunning: isLiveStreamingRunning(state),
+            _tooltip: 'recordingProtection.blocked',
+            visible: false
+        };
+    }
+
     // A button can be disabled/enabled only if enableFeaturesBasedOnToken
     // is on or if the recording is running.
     let _disabled = false;

@@ -41,6 +41,7 @@ import '../polls/middleware';
 import '../polls-history/middleware';
 import '../reactions/middleware';
 import '../recent-list/middleware';
+import '../recording-protection/middleware';
 import '../recording/middleware';
 import '../rejoin/middleware';
 import '../room-lock/middleware';

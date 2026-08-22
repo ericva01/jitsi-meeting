@@ -35,7 +35,6 @@ import { ISessionData } from '../../reducer';
 
 
 export interface IProps extends WithTranslation {
-
     /**
      * The app key for the dropbox authentication.
      */
@@ -102,6 +101,11 @@ export interface IProps extends WithTranslation {
      * The dropbox refresh token.
      */
     _rToken: string;
+
+    /**
+     * Whether Recording Protection is enabled.
+     */
+    _recordingProtectionEnabled: boolean;
 
     /**
      * Whether file recording is currently running.
@@ -438,6 +442,14 @@ class AbstractStartRecordingDialog extends Component<IProps, IState> {
      *   keep it open (e.g. on validation failure).
      */
     _onSubmit() {
+        if (this.props._recordingProtectionEnabled) {
+            this.props.dispatch(showErrorNotification({
+                titleKey: 'recordingProtection.title',
+                descriptionKey: 'recordingProtection.blocked'
+            }));
+
+            return false;
+        }
         const {
             _appKey,
             _conference,
@@ -668,6 +680,7 @@ export function mapStateToProps(state: IReduxState, _ownProps: any) {
         _recordingRunning: canManageRecordingOrTranscription
             ? isRecordingRunning(state)
             : Boolean(state['features/recording'].localRecordingRunning),
+        _recordingProtectionEnabled: state['features/recording-protection'].enabled,
         _rToken: state['features/dropbox'].rToken ?? '',
         _transcriptionRunning: canManageRecordingOrTranscription
             ? isRecorderTranscriptionsRunning(state)

@@ -68,6 +68,7 @@ import { IPrejoinState } from '../prejoin/reducer';
 import { IReactionsState } from '../reactions/reducer';
 import { IRecentListState } from '../recent-list/reducer';
 import { IRecordingState } from '../recording/reducer';
+import { IRecordingProtectionState } from '../recording-protection/reducer';
 import { IRemoteControlState } from '../remote-control/reducer';
 import { IScreenShareState } from '../screen-share/reducer';
 import { IScreenshotCaptureState } from '../screenshot-capture/reducer';
@@ -161,6 +162,7 @@ export interface IReduxState {
     'features/reactions': IReactionsState;
     'features/recent-list': IRecentListState;
     'features/recording': IRecordingState;
+    'features/recording-protection': IRecordingProtectionState;
     'features/remote-control': IRemoteControlState;
     'features/screen-share': IScreenShareState;
     'features/screenshot-capture': IScreenshotCaptureState;

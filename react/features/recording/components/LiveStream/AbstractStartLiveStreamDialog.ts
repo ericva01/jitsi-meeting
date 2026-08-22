@@ -12,7 +12,6 @@ import { JitsiRecordingConstants } from '../../../base/lib-jitsi-meet';
  * {@link AbstractStartLiveStreamDialog}.
  */
 export interface IProps extends WithTranslation {
-
     /**
      * The {@code JitsiConference} for the current conference.
      */
@@ -29,6 +28,8 @@ export interface IProps extends WithTranslation {
      * application.
      */
     _googleProfileEmail: string;
+
+    _recordingProtectionEnabled: boolean;
 
     /**
      * The live stream key that was used before.
@@ -185,6 +186,9 @@ export default class AbstractStartLiveStreamDialog<P extends IProps>
      * closing, true to close the modal.
      */
     _onSubmit() {
+        if (this.props._recordingProtectionEnabled) {
+            return false;
+        }
         const { broadcasts, selectedBoundStreamID } = this.state;
         const key
             = (this.state.streamKey || this.props._streamKey || '').trim();
@@ -246,6 +250,7 @@ export function _mapStateToProps(state: IReduxState) {
         _conference: state['features/base/conference'].conference,
         _googleAPIState: state['features/google-api'].googleAPIState,
         _googleProfileEmail: state['features/google-api'].profileEmail,
+        _recordingProtectionEnabled: state['features/recording-protection'].enabled,
         _streamKey: state['features/recording'].streamKey
     };
 }

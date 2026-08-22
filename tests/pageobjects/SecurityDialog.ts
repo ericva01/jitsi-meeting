@@ -11,6 +11,25 @@ const REMOVE_PASSWORD = 'remove-password';
  * Page object for the security dialog.
  */
 export default class SecurityDialog extends BaseDialog {
+    private getRecordingProtectionSwitch() {
+        return this.participant.driver.$('#recording-protection-toggle');
+    }
+
+    isRecordingProtectionEnabled() {
+        return this.getRecordingProtectionSwitch().isSelected();
+    }
+
+    isRecordingProtectionToggleEnabled() {
+        return this.getRecordingProtectionSwitch().isEnabled();
+    }
+
+    async toggleRecordingProtection() {
+        const recordingProtectionSwitch = this.getRecordingProtectionSwitch();
+
+        await recordingProtectionSwitch.waitForClickable();
+        await recordingProtectionSwitch.click();
+    }
+
     /**
      *  Waits for the settings dialog to be visible.
      */

@@ -46,7 +46,62 @@
                 display: none;
             }
         }
+
+        .recording-protection-heading {
+            align-items: center;
+            display: flex;
+            font-weight: 600;
+            justify-content: space-between;
+        }
+
+        .recording-protection-section p {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+        }
+
+        .recording-protection-limitation {
+            color: #d6dce1;
+        }
     }
+}
+
+.recording-protection-overlay {
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    z-index: 250;
+}
+
+.recording-protection-indicator {
+    background: rgba(18, 24, 32, .82);
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    left: 12px;
+    padding: 4px 8px;
+    position: absolute;
+    top: 12px;
+}
+
+.recording-protection-watermark {
+    animation: recording-protection-watermark-move 23s linear infinite alternate;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    opacity: .28;
+    position: absolute;
+    text-shadow: 0 1px 2px #000;
+    white-space: nowrap;
+}
+
+@keyframes recording-protection-watermark-move {
+    0% { left: 8%; top: 14%; }
+    35% { left: 68%; top: 27%; }
+    70% { left: 18%; top: 70%; }
+    100% { left: 72%; top: 78%; }
 }
 
 .new-toolbox .toolbox-content .toolbox-icon.toggled.security-toolbar-button {

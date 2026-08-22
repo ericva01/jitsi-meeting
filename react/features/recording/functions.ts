@@ -266,6 +266,14 @@ export function isRecordingSharingEnabled(state: IReduxState) {
 export function getRecordButtonProps(state: IReduxState) {
     let visible;
 
+    if (state['features/recording-protection'].enabled) {
+        return {
+            disabled: true,
+            tooltip: 'recordingProtection.blocked',
+            visible: false
+        };
+    }
+
     // a button can be disabled/enabled if enableFeaturesBasedOnToken
     // is on or if the livestreaming is running.
     let disabled = false;
